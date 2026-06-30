@@ -1,0 +1,17 @@
+{
+  "name": "로랑 · 첫인상 9피드 7일 가이드",
+  "short_name": "9피드 가이드",
+  "description": "인스타 첫인상 9개 피드를 7일 만에 완성하는 로랑 브로우샵 전용 가이드",
+  "lang": "ko",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF6F4",
+  "theme_color": "#F6D9E6",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
