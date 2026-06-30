@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>로랑 · 9피드 가이드</title>
+
+<!-- ===== 설치형 앱(PWA) 설정 ===== -->
+<meta name="theme-color" content="#F6D9E6">
+<meta name="description" content="인스타 첫인상 9개 피드를 7일 만에 완성하는 로랑 브로우샵 전용 앱">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="9피드 가이드">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF6F4; --card:#FFFFFF; --card2:#FAF2EE; --line:rgba(74,58,64,.10);
+  --ink:#473A40; --sub:#A89AA0; --body:#6F5D65;
+  --red:#E07B96; --red-d:#C9627E; --red-deep:#B65274; --red-soft:#D9728C;
+  --yellow:#D79A3C; --gold:#C68A46; --coral:#E08A72; --green:#5FAE89; --orange:#E3935A;
+  --ok:#5FAE89;
+  --c-prep:#D8A85A; --c-trust:#E07B96; --c-emo:#E08A72;
+  --bar-h:62px; --top-h:50px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;margin:0;overflow:hidden;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;color:var(--ink);
+  background:#ECE3E5;-webkit-font-smoothing:antialiased;line-height:1.6;}
+.serif{font-family:'Cormorant Garamond',serif;}
+img{display:block;}
+
+/* ===== APP SHELL ===== */
+.app{max-width:480px;margin:0 auto;height:100%;height:100dvh;
+  background:
+    radial-gradient(120% 55% at 82% -5%, #F4DCEA 0%, rgba(244,220,234,0) 55%),
+    radial-gradient(110% 50% at 0% 2%, #EBE2F7 0%, rgba(235,226,247,0) 50%),
+    radial-gradient(130% 45% at 50% 112%, #FCE9D6 0%, rgba(252,233,214,0) 55%),
+    var(--bg);
+  position:relative;display:flex;flex-direction:column;
+  overflow:hidden;box-shadow:0 0 60px rgba(170,130,150,.22);}
+
+.appbar{height:calc(var(--top-h) + env(safe-area-inset-top));
+  padding-top:env(safe-area-inset-top);
+  display:flex;align-items:center;justify-content:center;position:relative;
+  background:rgba(255,255,255,.72);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);flex-shrink:0;z-index:20;}
+.appbar .title{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--ink);}
+.appbar .back{position:absolute;left:6px;top:env(safe-area-inset-top);
+  height:var(--top-h);width:46px;border:none;background:none;cursor:pointer;
+  font-size:24px;color:var(--red-d);display:none;align-items:center;justify-content:center;}
+.appbar.show-back .back{display:flex;}
+.appbar .brand{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:15px;letter-spacing:3px;color:var(--red-d);}
+
+.screens{flex:1;position:relative;overflow:hidden;}
+.screen{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  opacity:0;transform:translateX(24px);pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease;padding:18px 18px 26px;}
+.screen.active{opacity:1;transform:none;pointer-events:auto;}
+
+/* tab bar */
+.tabbar{height:calc(var(--bar-h) + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  display:flex;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);flex-shrink:0;z-index:20;}
+.tab{flex:1;border:none;background:none;cursor:pointer;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;
+  color:var(--sub);font-family:inherit;font-size:10.5px;font-weight:700;padding-top:6px;}
+.tab svg{width:22px;height:22px;stroke:var(--sub);fill:none;stroke-width:1.7;
+  transition:stroke .2s,transform .15s;}
+.tab.on{color:var(--red-d);}
+.tab.on svg{stroke:var(--red);transform:translateY(-1px);}
+.tab .dot{width:6px;height:6px;border-radius:50%;background:var(--red);
+  position:absolute;top:7px;margin-left:20px;display:none;
+  box-shadow:0 0 0 2px #fff;}
+.tab.alert .dot{display:block;}
+
+/* shared */
+.eyebrow{font-size:10.5px;letter-spacing:4px;color:var(--red);font-weight:800;}
+.h-sec{font-size:20px;font-weight:900;letter-spacing:-.4px;margin:5px 0 14px;color:var(--ink);}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 8px 22px rgba(155,115,135,.10);}
+.sec-title{font-size:11px;letter-spacing:2px;font-weight:800;color:var(--red-d);
+  margin:8px 4px 8px;}
+
+/* ===== HOME ===== */
+.home-hero{background:linear-gradient(155deg,#F6D9E6 0%,#EAD9F2 50%,#FBE2D2 100%);
+  border-radius:22px;padding:26px 22px 24px;text-align:center;position:relative;
+  overflow:hidden;box-shadow:0 12px 30px rgba(210,160,190,.26);}
+.home-hero::after{content:"";position:absolute;top:-40px;right:-30px;width:160px;height:160px;
+  background:radial-gradient(circle,rgba(255,255,255,.55),transparent 70%);}
+.home-hero .brand{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:14px;letter-spacing:3px;color:var(--red-d);}
+.home-hero h1{font-size:26px;font-weight:900;line-height:1.3;margin:10px 0 6px;
+  letter-spacing:-.6px;color:#4A3A42;}
+.home-hero h1 .pt{color:var(--red-d);}
+.home-hero p{font-size:12px;color:#86727B;margin:0;}
+
+.ring-card{display:flex;align-items:center;gap:18px;padding:20px;margin:16px 0 14px;}
+.ring{position:relative;width:96px;height:96px;flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ring .pct b{font-size:25px;font-weight:900;line-height:1;color:var(--ink);}
+.ring .pct small{font-size:9px;color:var(--sub);letter-spacing:1px;margin-top:2px;}
+.ring-info{flex:1;min-width:0;}
+.ring-info .lab{font-size:11px;color:var(--sub);font-weight:700;}
+.ring-info .big{font-size:15px;font-weight:800;margin:2px 0 8px;color:var(--ink);}
+.ring-info .msg{font-size:11.5px;color:var(--sub);line-height:1.5;}
+
+.readfirst{display:block;width:100%;text-align:left;padding:16px 18px;margin-bottom:12px;cursor:pointer;
+  border:1px solid rgba(224,123,150,.30);background:linear-gradient(160deg,#FCEAF1,#F4EAF5);
+  font-family:inherit;transition:transform .12s;border-radius:18px;
+  box-shadow:0 8px 22px rgba(200,150,175,.12);}
+.readfirst:active{transform:scale(.985);}
+.readfirst .rf-top{display:flex;align-items:center;justify-content:space-between;}
+.readfirst .rf-step{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--red-d);}
+.readfirst .rf-arrow{font-size:20px;color:var(--red-d);}
+.readfirst .rf-title{font-size:15.5px;font-weight:900;color:var(--ink);margin:7px 0 4px;letter-spacing:-.3px;}
+.readfirst .rf-sub{font-size:11.5px;color:var(--body);line-height:1.5;}
+.readfirst .rf-btn{display:inline-block;margin-top:12px;background:#473A40;color:#fff;
+  font-size:12.5px;font-weight:900;padding:9px 16px;border-radius:10px;}
+.today-card{padding:18px;margin-bottom:14px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .12s;border:1px solid rgba(224,123,150,.28);
+  background:linear-gradient(180deg,#FFF4F8,#FFFFFF);}
+.today-card:active{transform:scale(.985);}
+.today-card .tlab{font-size:10.5px;font-weight:800;letter-spacing:1px;color:var(--red-d);}
+.today-card .trow{display:flex;align-items:center;gap:13px;margin-top:10px;}
+.today-card .tday{width:48px;height:48px;border-radius:14px;flex-shrink:0;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:900;}
+.today-card .tt{flex:1;min-width:0;}
+.today-card .tt .tm{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--ink);}
+.today-card .tt .ts{font-size:11.5px;color:var(--sub);margin-top:1px;}
+.today-card .arrow{font-size:22px;color:var(--red);}
+.today-card .go-btn{margin-top:15px;width:100%;border:none;border-radius:12px;
+  background:#473A40;color:#fff;font-family:inherit;font-weight:900;font-size:13.5px;
+  padding:14px;cursor:pointer;letter-spacing:-.2px;}
+
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.q-card{padding:16px 14px;cursor:pointer;transition:transform .12s;text-align:left;
+  border:1px solid var(--line);background:var(--card);border-radius:16px;
+  box-shadow:0 8px 22px rgba(155,115,135,.10);font-family:inherit;}
+.q-card:active{transform:scale(.97);}
+.q-card .qi{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;
+  justify-content:center;font-size:18px;margin-bottom:10px;font-weight:800;}
+.q-card .qt{font-size:13.5px;font-weight:900;letter-spacing:-.3px;color:var(--ink);}
+.q-card .qs{font-size:10.5px;color:var(--sub);margin-top:2px;}
+
+.foot-credit{text-align:center;padding:22px 0 6px;}
+.foot-credit .wm{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:var(--red-d);}
+.foot-credit p{font-size:10px;color:var(--sub);margin:2px 0 0;line-height:1.6;}
+
+/* ===== GUIDE PAGER ===== */
+#guide{padding:0;display:flex;flex-direction:column;}
+.pager{flex:1;overflow:hidden;position:relative;}
+.track{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1);}
+.page{min-width:100%;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 18px 16px;}
+.tap-hint{text-align:center;font-size:10.5px;color:var(--sub);margin-bottom:12px;
+  letter-spacing:1px;font-weight:700;}
+.tap-hint b{color:var(--red-d);}
+
+.p-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.p-day{width:54px;height:54px;border-radius:16px;flex-shrink:0;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;letter-spacing:-1px;}
+.p-headtxt{flex:1;min-width:0;}
+.p-cat{font-size:10px;font-weight:800;padding:3px 10px;border-radius:99px;display:inline-block;}
+.cat-prep{background:rgba(216,168,90,.16);color:#B5832F;}
+.cat-trust{background:rgba(224,123,150,.16);color:var(--red-d);}
+.cat-emo{background:rgba(224,138,114,.18);color:#C4664A;}
+.p-title{font-size:18.5px;font-weight:900;letter-spacing:-.4px;margin-top:6px;color:var(--ink);}
+.p-mission{font-size:12px;color:var(--sub);margin-top:1px;}
+
+.p-desc{font-size:12.5px;color:var(--body);line-height:1.7;margin:0 0 14px;}
+.tipbox{background:var(--card2);border-left:3px solid var(--red);border-radius:0 12px 12px 0;
+  padding:12px 14px;margin:0 0 14px;}
+.tipbox .t{font-size:10.5px;font-weight:900;color:var(--red-d);letter-spacing:.5px;
+  display:block;margin-bottom:4px;}
+.tipbox p{font-size:11.5px;color:var(--body);margin:0;line-height:1.6;}
+.fillin{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;color:var(--sub);
+  background:#FBF1F5;border:1px dashed rgba(224,123,150,.4);padding:7px 12px;
+  border-radius:9px;margin:0 0 16px;font-weight:700;}
+.fillin b{color:var(--red-d);}
+
+.tasks{list-style:none;margin:0;padding:0;}
+.tasks li{border-radius:11px;}
+.tasks label{display:flex;align-items:flex-start;gap:12px;padding:12px 8px;cursor:pointer;}
+.tasks input{appearance:none;-webkit-appearance:none;flex-shrink:0;width:22px;height:22px;
+  border:2px solid #D9C8CF;border-radius:7px;margin:0;cursor:pointer;position:relative;transition:all .15s;}
+.tasks input:checked{background:var(--red);border-color:var(--red);}
+.tasks input:checked::after{content:"✓";position:absolute;color:#fff;font-size:14px;font-weight:900;left:4px;top:-2px;}
+.tasks .txt{font-size:13px;line-height:1.5;padding-top:1px;color:var(--ink);}
+.tasks input:checked + .txt{color:var(--sub);text-decoration:line-through;text-decoration-color:rgba(168,154,160,.6);}
+
+.pfoot{flex-shrink:0;border-top:1px solid var(--line);background:rgba(255,255,255,.92);
+  backdrop-filter:blur(8px);padding:11px 14px;display:flex;align-items:center;gap:12px;}
+.pfoot .nav{border:none;background:none;font-family:inherit;cursor:pointer;
+  font-size:13px;font-weight:800;color:var(--ink);padding:10px 6px;white-space:nowrap;}
+.pfoot .nav:disabled{opacity:.28;cursor:default;}
+.pfoot .nav.prev{color:var(--sub);}
+.dots{flex:1;display:flex;justify-content:center;gap:7px;}
+.dot{width:8px;height:8px;border-radius:50%;background:#E2D2D8;cursor:pointer;transition:all .2s;}
+.dot.cur{width:22px;border-radius:99px;background:var(--red);}
+.dot.done{background:var(--green);}
+.dot.fin{background:var(--gold);}
+.pfoot .next{background:var(--red);color:#fff;border-radius:11px;padding:12px 20px;
+  font-size:13.5px;font-weight:900;box-shadow:0 4px 14px rgba(224,123,150,.40);}
+
+.finale{text-align:center;padding:40px 24px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;height:100%;}
+.finale .em{font-size:56px;margin-bottom:6px;}
+.finale h2{font-size:23px;font-weight:900;margin:8px 0;color:var(--ink);}
+.finale p{font-size:13px;color:var(--body);margin:0 0 8px;line-height:1.6;}
+.finale .fbtn{margin-top:22px;width:100%;max-width:280px;border:none;border-radius:13px;
+  background:#473A40;color:#fff;font-family:inherit;font-weight:900;font-size:14px;padding:15px;cursor:pointer;}
+.finale .fbtn.ghost{background:none;color:var(--red-d);border:1px solid rgba(224,123,150,.5);margin-top:10px;}
+
+/* ===== GRID ===== */
+.gridmode{display:flex;gap:8px;margin:2px 0 10px;}
+.gm-btn{flex:1;border:1px solid var(--line);background:var(--card);color:var(--sub);
+  font-family:inherit;font-size:12.5px;font-weight:800;padding:10px;border-radius:11px;cursor:pointer;}
+.gm-btn.on{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 4px 12px rgba(224,123,150,.32);}
+.grid-hint{font-size:12px;color:var(--sub);margin:-2px 0 8px;}
+.grid-note{font-size:10.5px;color:var(--sub);line-height:1.5;margin:12px 2px 0;}
+.grid9-map{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;}
+.cell{aspect-ratio:1;border-radius:14px;cursor:pointer;position:relative;border:none;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#fff;font-family:inherit;transition:transform .15s;}
+.cell:active{transform:scale(.94);}
+.cell.sel{outline:3px solid var(--red);outline-offset:2px;}
+.cell .pos{position:absolute;top:5px;left:8px;font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:600;opacity:.9;z-index:2;}
+.cell.filled .pos{background:rgba(0,0,0,.5);border-radius:6px;padding:0 6px;opacity:1;line-height:1.4;}
+.cell .ico{font-size:21px;margin-bottom:2px;}
+.cell .nm{font-size:11px;font-weight:800;letter-spacing:-.3px;}
+.cell .cell-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.cell .cell-x{position:absolute;top:4px;right:4px;z-index:3;width:24px;height:24px;border-radius:50%;
+  background:rgba(0,0,0,.6);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.cell .cell-add{position:absolute;bottom:7px;left:0;right:0;text-align:center;z-index:2;
+  font-size:10px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);}
+.cell.addmode{outline:2px dashed rgba(255,255,255,.5);outline-offset:-4px;}
+.t-bf{background:linear-gradient(150deg,#E892A6,#D26A86);}
+.t-emo{background:linear-gradient(150deg,#EFAE8E,#DD8463);}
+.t-rev{background:linear-gradient(150deg,#E0C079,#C49A4E);}
+.t-pro{background:linear-gradient(150deg,#84C9A6,#5CA982);}
+.t-diff{background:linear-gradient(150deg,#C3ABE8,#A488D6);}
+.cell-detail{margin-top:14px;padding:16px;}
+.cell-detail .dh{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.cell-detail .dh .badge{font-size:10px;font-weight:900;color:#fff;padding:3px 10px;border-radius:99px;}
+.cell-detail .dt{font-size:15px;font-weight:900;color:var(--ink);}
+.cell-detail p{font-size:12.5px;color:var(--body);margin:0;line-height:1.6;}
+.cell-detail .when{font-size:10.5px;color:var(--red-d);font-weight:800;margin-top:9px;}
+.legend{display:flex;flex-wrap:wrap;gap:7px 13px;margin-top:16px;}
+.legend span{font-size:10.5px;color:var(--sub);display:flex;align-items:center;gap:5px;}
+.legend i{width:11px;height:11px;border-radius:3px;}
+
+/* ===== CHECK ===== */
+.check-intro{font-size:12px;color:var(--body);margin:0 0 14px;line-height:1.6;}
+.check10{padding:6px 16px 10px;}
+.check10 ul{margin:0;padding:0;list-style:none;}
+.check10 label{display:flex;align-items:center;gap:12px;padding:12px 4px;
+  border-bottom:1px solid var(--line);cursor:pointer;}
+.check10 li:last-child label{border-bottom:none;}
+.check10 .qn{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;
+  color:var(--red-d);width:24px;flex-shrink:0;text-align:center;}
+.check10 .qt{font-size:13px;flex:1;line-height:1.4;color:var(--ink);}
+.check10 input{appearance:none;-webkit-appearance:none;flex-shrink:0;width:23px;height:23px;
+  border:2px solid #D9C8CF;border-radius:50%;cursor:pointer;position:relative;transition:all .15s;}
+.check10 input:checked{background:var(--green);border-color:var(--green);}
+.check10 input:checked::after{content:"✓";position:absolute;color:#fff;font-size:14px;font-weight:900;left:4px;top:-1px;}
+.check10 input:checked ~ .qt{color:var(--sub);text-decoration:line-through;text-decoration-color:rgba(168,154,160,.6);}
+
+/* ===== INFO ===== */
+.why{padding:18px;margin-bottom:14px;}
+.why .q{font-size:15px;font-weight:800;line-height:1.5;margin-bottom:10px;color:var(--ink);}
+.why .q .hl{background:linear-gradient(transparent 55%,rgba(224,123,150,.32) 55%);padding:0 2px;}
+.why p{font-size:12.5px;color:var(--body);margin:0 0 8px;}
+.why p b{color:var(--ink);}
+.flow{display:flex;align-items:center;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+.flow .step{font-size:11px;font-weight:800;padding:8px 14px;border-radius:99px;
+  background:var(--card2);border:1px solid var(--line);text-align:center;}
+.flow .s1{color:var(--coral);} .flow .s2{color:var(--green);} .flow .s3{color:var(--red-d);}
+.flow .step small{color:var(--sub);font-weight:600;}
+.flow .arr{color:var(--sub);font-size:11px;}
+
+.colorbox{padding:18px;margin-bottom:14px;}
+.colorbox > p{font-size:12px;color:var(--body);margin:0 0 14px;line-height:1.6;}
+.colorbox > p b{color:var(--ink);}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
+.sw{text-align:center;}
+.sw .chip{aspect-ratio:1;border-radius:12px;border:1px solid rgba(74,58,64,.10);margin-bottom:6px;}
+.sw .nm{font-size:10.5px;font-weight:800;color:var(--ink);} .sw .hx{font-size:9px;color:var(--sub);}
+
+.notes{padding:4px 16px;margin-bottom:8px;}
+.notes details{border-bottom:1px solid var(--line);}
+.notes details:last-child{border-bottom:none;}
+.notes summary{font-size:13px;font-weight:800;padding:14px 2px;cursor:pointer;list-style:none;
+  display:flex;justify-content:space-between;align-items:center;color:var(--ink);}
+.notes summary::-webkit-details-marker{display:none;}
+.notes summary::after{content:"＋";color:var(--red-d);font-weight:800;font-size:16px;}
+.notes details[open] summary::after{content:"－";}
+.notes .nbody{padding:0 2px 16px;}
+.notes .nbody li{font-size:12px;color:var(--body);margin-bottom:8px;line-height:1.55;}
+.notes .nbody ul{margin:0;padding-left:18px;}
+.notes .nbody li b{color:var(--ink);}
+.cmp{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px;}
+.cmp th,.cmp td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top;color:var(--body);}
+.cmp th{background:var(--card2);font-weight:800;color:var(--ink);}
+.cmp .h1c{color:var(--coral);} .cmp .h2c{color:var(--red-d);}
+
+.reset-row{text-align:center;margin:18px 0 4px;}
+.reset-row button{border:1px solid var(--line);background:var(--card);color:var(--red-d);
+  font-family:inherit;font-size:12px;font-weight:800;padding:11px 22px;border-radius:11px;cursor:pointer;}
+
+/* read-progress + read checkbox */
+.readbar{position:sticky;top:0;z-index:6;background:var(--bg);padding:4px 0 12px;margin-bottom:2px;}
+.readbar .rb-txt{font-size:11.5px;color:var(--sub);font-weight:700;margin-bottom:6px;}
+.readbar .rb-txt b{color:var(--red-d);font-size:13px;}
+.readbar .rb-track{height:8px;border-radius:99px;background:#EFE2E6;overflow:hidden;}
+.readbar .rb-fill{height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--red),var(--gold));transition:width .35s ease;}
+.readrow{display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:13px;
+  border-top:1px solid var(--line);cursor:pointer;}
+.readrow input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:2px solid #D9C8CF;
+  border-radius:7px;margin:0;cursor:pointer;position:relative;flex-shrink:0;transition:all .15s;}
+.readrow input:checked{background:var(--green);border-color:var(--green);}
+.readrow input:checked::after{content:"✓";position:absolute;color:#fff;font-size:14px;font-weight:900;left:4px;top:-2px;}
+.readrow .rk-txt{font-size:12.5px;font-weight:800;color:var(--sub);}
+.readrow input:checked ~ .rk-txt{color:var(--green);}
+
+/* edu cards (왜 9피드 deep-dive) */
+.edu-card{padding:16px;margin-bottom:12px;}
+.edu-card h4{font-size:14.5px;font-weight:900;color:var(--ink);margin:0 0 9px;letter-spacing:-.3px;}
+.edu-card h4 .n{display:inline-block;background:var(--red);color:#fff;font-size:12px;
+  padding:1px 9px;border-radius:7px;margin-right:5px;}
+.edu-card p{font-size:12px;color:var(--body);line-height:1.65;margin:0 0 8px;}
+.edu-card p b{color:var(--ink);}
+.edu-img{width:100%;border-radius:12px;border:1px solid var(--line);margin:2px 0 5px;display:block;}
+.edu-cap{font-size:10px;color:var(--sub);text-align:center;margin:0 0 8px;}
+.edu-list{margin:6px 0 0;padding:0;list-style:none;}
+.edu-list li{font-size:11.5px;color:var(--body);line-height:1.5;padding:5px 0 5px 17px;position:relative;}
+.edu-list li::before{content:"";position:absolute;left:4px;top:11px;width:5px;height:5px;
+  border-radius:50%;background:var(--red);}
+.edu-list li b{color:var(--ink);}
+.quote{background:var(--card2);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;
+  padding:11px 13px;margin:9px 0;font-size:12px;color:#5C4B53;line-height:1.6;}
+.verdict{font-size:12px;font-weight:800;margin-top:10px;padding:9px 13px;border-radius:10px;}
+.verdict.good{background:rgba(95,174,137,.16);color:#3E8E6C;}
+.verdict.bad{background:rgba(224,123,150,.16);color:var(--red-d);}
+
+/* ===== INFO PAGER (먼저 읽어보기 — 한 장씩) ===== */
+#info{padding:0;display:flex;flex-direction:column;overflow:hidden;}
+.iprog{height:4px;background:#EFE2E6;flex-shrink:0;}
+.iprog-fill{height:100%;width:0;border-radius:0 99px 99px 0;
+  background:linear-gradient(90deg,var(--red),var(--gold));transition:width .35s ease;}
+.ipager{flex:1;overflow:hidden;position:relative;}
+.itrack{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1);}
+.ipage{min-width:100%;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 18px 16px;}
+.ipage .sec-title{font-size:12px;margin:2px 4px 12px;}
+.ipage .readrow{display:none;}            /* 카드별 체크는 페이저에선 숨김 */
+.ipage .edu-card,.ipage .card{margin-bottom:0;}
+.fin-read{text-align:center;padding:18px 6px;}
+.fin-read .fr-em{font-size:34px;margin-bottom:6px;}
+.fin-read h3{font-size:18px;font-weight:900;color:var(--ink);margin:4px 0 8px;letter-spacing:-.3px;}
+.fin-read p{font-size:12.5px;color:var(--body);line-height:1.6;margin:0 0 18px;}
+
+/* ===== LEAD GATE ===== */
+.gate{position:absolute;inset:0;z-index:100;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(env(safe-area-inset-top) + 26px) 24px calc(env(safe-area-inset-bottom) + 26px);
+  background:
+    radial-gradient(120% 50% at 80% 0%, #F4DCEA 0%, rgba(244,220,234,0) 55%),
+    radial-gradient(120% 45% at 10% 100%, #FCE9D6 0%, rgba(252,233,214,0) 55%),
+    #FBF6F4;
+  display:flex;flex-direction:column;justify-content:center;}
+.gate.hide{display:none;}
+.gate-inner{max-width:340px;margin:0 auto;width:100%;}
+.gate-badge{font-size:10px;font-weight:900;letter-spacing:3px;color:var(--red-d);text-align:center;}
+.gate-title{font-size:25px;font-weight:900;line-height:1.3;letter-spacing:-.6px;color:var(--ink);
+  text-align:center;margin:8px 0 8px;}
+.gate-title span{color:var(--red-d);}
+.gate-sub{font-size:12.5px;color:var(--body);text-align:center;line-height:1.6;margin:0 0 20px;}
+.gate-sub b{color:var(--red-d);}
+.gate-lab{display:block;font-size:11px;font-weight:800;color:var(--sub);margin:0 2px 5px;}
+.gate-input{width:100%;border:1.5px solid #E6D7DD;border-radius:13px;background:#fff;
+  font-family:inherit;font-size:15px;color:var(--ink);padding:13px 15px;margin-bottom:14px;
+  -webkit-appearance:none;transition:border-color .15s;}
+.gate-input:focus{outline:none;border-color:var(--red);}
+.gate-input::placeholder{color:#C9BCC2;}
+.gate-kakao{width:100%;border:none;border-radius:13px;cursor:pointer;font-family:inherit;
+  font-weight:900;font-size:14px;padding:14px;background:#FAE100;color:#3A2E00;
+  box-shadow:0 6px 16px rgba(220,200,30,.32);}
+.gate-kakao.done{background:#E7F4EA;color:#2E8B57;box-shadow:none;}
+.gate-kakao.chat{margin-top:10px;background:#fff;color:#7A6730;border:1.5px solid #FAE100;box-shadow:none;}
+.gate-kakao.chat.done{background:#E7F4EA;color:#2E8B57;border-color:#9ED9B0;}
+.gate-steps{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+  margin-bottom:20px;box-shadow:0 8px 22px rgba(155,115,135,.08);}
+.gstep{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:700;color:var(--ink);padding:5px 0;}
+.gstep .gnum{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;
+  font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.gate-apply{width:100%;border:none;border-radius:13px;cursor:pointer;font-family:inherit;
+  font-weight:900;font-size:14.5px;padding:15px;background:var(--red);color:#fff;
+  box-shadow:0 8px 20px rgba(224,123,150,.40);}
+.gate-apply.done{background:#E7F4EA;color:#2E8B57;box-shadow:none;}
+.gate-start{width:100%;border:none;border-radius:13px;cursor:pointer;font-family:inherit;
+  font-weight:900;font-size:14.5px;padding:15px;background:#473A40;color:#fff;margin-top:11px;
+  transition:opacity .2s;box-shadow:0 8px 20px rgba(71,58,64,.28);}
+.gate-start:disabled,.gate-start.off{opacity:.4;}
+.gate-note{font-size:10.5px;color:var(--sub);text-align:center;margin:12px 0 0;line-height:1.5;}
+.gate-note.err{color:var(--red-d);font-weight:700;}
+.gate-skip{display:block;margin:16px auto 0;border:none;background:none;cursor:pointer;
+  font-family:inherit;font-size:11.5px;color:var(--sub);text-decoration:underline;}
+
+/* kakao + offer CTAs */
+.kakao-btn{margin-top:16px;width:100%;border:none;border-radius:12px;cursor:pointer;
+  background:#FAE100;color:#3A2E00;font-family:inherit;font-weight:900;font-size:13.5px;
+  padding:13px;letter-spacing:-.2px;box-shadow:0 6px 16px rgba(220,200,30,.35);}
+.kakao-btn.small{margin-top:14px;font-size:12.5px;padding:12px;
+  background:#FBEFA0;color:#5A4A00;box-shadow:none;}
+.kakao-btn.form{background:var(--red);color:#fff;box-shadow:0 6px 16px rgba(224,123,150,.38);}
+.offer{margin-top:30px;width:100%;max-width:300px;}
+.offer-h{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--sub);margin-bottom:10px;}
+.offer-card{display:block;width:100%;text-align:left;border:1px solid var(--line);
+  background:var(--card);border-radius:16px;padding:15px 16px;margin-bottom:10px;cursor:pointer;
+  font-family:inherit;transition:transform .12s;box-shadow:0 8px 22px rgba(155,115,135,.10);}
+.offer-card:active{transform:scale(.98);}
+.offer-card.o79{border-color:rgba(224,123,150,.45);background:linear-gradient(180deg,#FFF4F8,#FFFFFF);}
+.offer-card .o-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.offer-card .o-tag{font-size:9.5px;font-weight:900;letter-spacing:1px;color:#fff;background:var(--sub);
+  padding:2px 9px;border-radius:99px;}
+.offer-card .o-tag.gold{background:var(--red);}
+.offer-card .o-price{font-size:15px;font-weight:900;color:var(--ink);}
+.offer-card .o-was{font-size:11px;font-weight:700;color:var(--sub);margin-right:3px;text-decoration:line-through;}
+.offer-card .o-title{font-size:13.5px;font-weight:900;color:var(--ink);letter-spacing:-.3px;}
+.offer-card .o-sub{font-size:10.5px;color:var(--body);margin-top:3px;line-height:1.5;}
+.offer-card .o-sub b{color:var(--red-d);}
+
+/* 맛보기 영상 버튼 (홈) */
+.video-card{display:flex;align-items:center;gap:13px;width:100%;text-align:left;cursor:pointer;
+  border:1px solid rgba(224,123,150,.30);border-radius:16px;padding:14px 15px;margin-bottom:14px;
+  font-family:inherit;background:linear-gradient(120deg,#FFF1F6,#FBF0F8);
+  box-shadow:0 8px 22px rgba(200,150,175,.12);transition:transform .12s;}
+.video-card:active{transform:scale(.985);}
+.video-card .vc-play{flex-shrink:0;width:40px;height:40px;border-radius:50%;background:var(--red);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;padding-left:3px;
+  box-shadow:0 4px 12px rgba(224,123,150,.4);}
+.video-card .vc-txt{flex:1;min-width:0;font-size:13.5px;font-weight:900;color:var(--ink);letter-spacing:-.3px;}
+.video-card .vc-txt small{font-size:10.5px;font-weight:600;color:var(--sub);}
+.video-card .vc-arrow{font-size:22px;color:var(--red);}
+.video-card.growth{background:linear-gradient(120deg,#F1ECFB,#FBF0F8);border-color:rgba(150,120,200,.28);}
+.video-card.growth .vc-play{background:#9B7FD0;padding-left:0;box-shadow:0 4px 12px rgba(150,120,200,.4);}
+.video-card.growth .vc-arrow{color:#9B7FD0;}
+
+/* 맛보기 영상 버튼 (관문) */
+.gate-video{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
+  border:1.5px solid rgba(224,123,150,.35);border-radius:14px;padding:13px 15px;margin-bottom:18px;
+  font-family:inherit;background:#fff;box-shadow:0 6px 18px rgba(200,150,175,.12);}
+.gate-video:active{transform:scale(.985);}
+.gate-video .gv-play{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--red);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;padding-left:3px;}
+.gate-video .gv-txt{flex:1;font-size:13px;font-weight:900;color:var(--ink);letter-spacing:-.3px;}
+.gate-video .gv-txt small{font-size:10.5px;font-weight:600;color:var(--sub);}
+
+/* before/after scroll gallery */
+.ba-scroll{display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  padding:4px 2px 8px;margin:2px -2px 0;scroll-snap-type:x mandatory;}
+.ba-scroll::-webkit-scrollbar{height:5px;}
+.ba-scroll::-webkit-scrollbar-thumb{background:#E2D2D8;border-radius:99px;}
+.ba{flex:0 0 88%;margin:0;scroll-snap-align:center;}
+.ba img{width:100%;border-radius:12px;border:1px solid var(--line);display:block;}
+.ba figcaption{font-size:11px;font-weight:800;color:var(--red-d);text-align:center;margin-top:6px;}
+
+/* install banner */
+#installBanner{display:none;position:absolute;left:14px;right:14px;
+  bottom:calc(var(--bar-h) + 12px + env(safe-area-inset-bottom));z-index:50;
+  background:var(--card);border:1px solid rgba(224,123,150,.4);border-radius:16px;padding:14px 16px;
+  box-shadow:0 14px 38px rgba(150,110,130,.30);font-size:12.5px;line-height:1.55;}
+#installBanner .x{position:absolute;top:7px;right:10px;border:none;background:none;
+  font-size:15px;color:var(--sub);cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOP BAR -->
+  <header class="appbar" id="appbar">
+    <button class="back" onclick="back()">‹</button>
+    <span class="title" id="appTitle">로랑</span>
+  </header>
+
+  <!-- SCREENS -->
+  <div class="screens">
+
+    <!-- HOME -->
+    <section class="screen active" id="home">
+      <div class="home-hero">
+        <div class="brand">LAURENT · the.laurent</div>
+        <h1>첫인상 <span class="pt">9피드</span><br>7일 챌린지</h1>
+        <p>하루에 한 장씩, 탭하며 따라오세요</p>
+        <button class="kakao-btn form" onclick="openForm()">📝 첫인상 9피드 챌린지 신청하기</button>
+      </div>
+
+      <button class="video-card" onclick="openVideo()">
+        <span class="vc-play">▶</span>
+        <span class="vc-txt"><b>🎬 9개 피드체인지 맛보기 영상</b><br><small>3분 무료 공개 · 탭하면 바로 재생</small></span>
+        <span class="vc-arrow">›</span>
+      </button>
+
+      <button class="video-card growth" onclick="openChat()">
+        <span class="vc-play">👥</span>
+        <span class="vc-txt"><b>📔 뷰티샵 성장일지 단톡방</b><br><small>원장님들과 함께 성장하는 공간 · 입장하기</small></span>
+        <span class="vc-arrow">›</span>
+      </button>
+
+      <div class="card ring-card">
+        <div class="ring">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle cx="48" cy="48" r="42" stroke="#F0E3E8" stroke-width="9" fill="none"/>
+            <circle id="ringFg" cx="48" cy="48" r="42" stroke="url(#rg)" stroke-width="9"
+              fill="none" stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+            <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#E07B96"/><stop offset="1" stop-color="#D79A3C"/>
+            </linearGradient></defs>
+          </svg>
+          <div class="pct"><b id="ringPct">0</b><small>완료</small></div>
+        </div>
+        <div class="ring-info">
+          <div class="lab">전체 진행률</div>
+          <div class="big" id="ringCnt">0 / 0 미션</div>
+          <div class="msg" id="ringMsg">월요일 미션부터 시작해 보세요 ✦</div>
+        </div>
+      </div>
+
+      <button class="card readfirst" onclick="openInfo()">
+        <div class="rf-top"><span class="rf-step">STEP 0</span><span class="rf-arrow">›</span></div>
+        <div class="rf-title">미션 전에, 먼저 읽어보세요 📖</div>
+        <div class="rf-sub">왜 9피드인지 · 어떤 피드를 어디에 · 컬러까지<br>3분이면 흐름이 한눈에 들어와요</div>
+        <span class="rf-btn">먼저 읽어보기 →</span>
+      </button>
+
+      <div class="card today-card" id="todayCard" onclick="startToday()">
+        <div class="tlab" id="todayLab">★ 오늘의 미션</div>
+        <div class="trow">
+          <div class="tday" id="todayDay">월</div>
+          <div class="tt">
+            <div class="tm" id="todayTitle">브랜딩 컬러 세팅</div>
+            <div class="ts" id="todaySub">컬러 정하기 + 사진 보정</div>
+          </div>
+          <div class="arrow">›</div>
+        </div>
+        <button class="go-btn" id="todayBtn">오늘 미션 시작하기 →</button>
+      </div>
+
+      <div class="sec-title">📖 먼저 읽어보기</div>
+      <div class="quick">
+        <button class="q-card" onclick="openInfo()">
+          <div class="qi" style="background:rgba(236,140,107,.18);color:var(--coral)">✦</div>
+          <div class="qt">왜 9피드?</div><div class="qs">전략 · 컬러 · 주의사항</div>
+        </button>
+        <button class="q-card" onclick="nav('grid')">
+          <div class="qi" style="background:rgba(230,30,42,.18);color:var(--red-soft)">▦</div>
+          <div class="qt">9칸 배치도</div><div class="qs">어디에 뭘 넣나</div>
+        </button>
+      </div>
+
+      <div class="sec-title">✅ 미션 시작</div>
+      <div class="quick">
+        <button class="q-card" onclick="nav('guide')">
+          <div class="qi" style="background:rgba(228,181,62,.18);color:var(--gold)">▤</div>
+          <div class="qt">7일 가이드</div><div class="qs">요일별 미션 전체</div>
+        </button>
+        <button class="q-card" onclick="nav('check')">
+          <div class="qi" style="background:rgba(54,171,92,.18);color:var(--green)">✓</div>
+          <div class="qt">필수 점검</div><div class="qs">완성 전 10가지</div>
+        </button>
+      </div>
+
+      <div class="foot-credit">
+        <div class="wm">laurent.</div>
+        <p>「첫 인상 피드 9개 구성법」 기반 · 로랑 맞춤</p>
+      </div>
+    </section>
+
+    <!-- GUIDE -->
+    <section class="screen" id="guide">
+      <div class="pager"><div class="track" id="track"></div></div>
+      <div class="pfoot" id="pfoot">
+        <button class="nav prev" id="prevBtn" onclick="goStep(step-1)">‹ 이전</button>
+        <div class="dots" id="dots"></div>
+        <button class="nav next" id="nextBtn" onclick="nextStep()">다음 ›</button>
+      </div>
+    </section>
+
+    <!-- GRID -->
+    <section class="screen" id="grid">
+      <div class="eyebrow">TARGET LAYOUT</div>
+      <div class="h-sec">완성 목표 · 9칸 배치도</div>
+      <div class="gridmode">
+        <button class="gm-btn on" id="gmGuide" onclick="setGridMode('guide')">📋 가이드 보기</button>
+        <button class="gm-btn" id="gmMine" onclick="setGridMode('mine')">🖼 내 피드 채우기</button>
+      </div>
+      <p class="grid-hint" id="gridHint">칸을 탭하면 무엇을·언제 만들지 알려줘요</p>
+      <div class="grid9-map" id="grid9"></div>
+      <input type="file" id="cellFile" accept="image/*" style="display:none">
+      <div class="card cell-detail" id="cellDetail"></div>
+      <p class="grid-note" id="gridNote" style="display:none">올린 사진은 이 휴대폰(브라우저)에만 저장돼요. 인스타에는 자동 업로드되지 않아요.</p>
+      <div class="legend">
+        <span><i class="t-bf"></i>전·후 4칸</span>
+        <span><i style="background:#DD8463"></i>감성 2칸</span>
+        <span><i style="background:#C49A4E"></i>후기 1칸</span>
+        <span><i style="background:#5CA982"></i>전문성 1칸</span>
+        <span><i style="background:#A488D6"></i>예약·차별화 1칸</span>
+      </div>
+    </section>
+
+    <!-- CHECK -->
+    <section class="screen" id="check">
+      <div class="eyebrow">FINAL CHECK</div>
+      <div class="h-sec">완성 전 필수 점검 10가지</div>
+      <p class="check-intro">9개를 다 만든 뒤, 아래 10가지를 모두 만족하는지 확인하세요. 하나라도 비면 그 요소를 보강해요.</p>
+      <div class="card check10"><ul id="check10"></ul></div>
+    </section>
+
+    <!-- INFO -->
+    <section class="screen" id="info">
+      <div class="iprog"><div class="iprog-fill" id="iprogFill"></div></div>
+      <div class="ipager"><div class="itrack" id="itrack"></div></div>
+      <div class="pfoot" id="ifoot">
+        <button class="nav prev" id="iprev" onclick="goIStep(iStep-1)">‹ 이전</button>
+        <div class="dots" id="idots"></div>
+        <button class="nav next" id="inext" onclick="nextIStep()">다음 ›</button>
+      </div>
+
+      <div id="isource" hidden>
+      <div class="sec-title">① 왜 9개 피드일까?</div>
+      <div class="card why">
+        <div class="q"><span class="hl">3초 안에</span> 마음을 사로잡는 게 첫 9개 피드예요.</div>
+        <p>예쁜 감성 피드는 <b>유입</b>까지만. 20만원대 시술은 "이 원장님 믿을 만하다"는 <b>신뢰</b>가 있어야 예약으로 이어져요.</p>
+        <p>그래서 9칸을 <b>감성 + 신뢰</b>로 균형 있게 채우는 게 핵심입니다.</p>
+        <div class="flow">
+          <span class="step s1">감성<br><small>예쁘다</small></span><span class="arr">→</span>
+          <span class="step s2">논리<br><small>합리적</small></span><span class="arr">→</span>
+          <span class="step s3">신뢰<br><small>믿을만함</small></span>
+        </div>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r1"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">② 첫 9개 = 계정의 첫인상</div>
+      <div class="card edu-card">
+        <h4>첫 9개 = 계정의 "첫인상 세트"</h4>
+        <img class="edu-img" src="edu-12.jpg" alt="인스타 첫 9개 피드 그리드 예시" loading="lazy">
+        <p>사람들은 프로필에 들어와 <b>딱 9개까지만</b> 보고 팔로우할지·예약할지를 결정해요. 그래서 첫 9개 피드가 곧 <b>3초 안의 첫인상</b>이에요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r2"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">③ 왜 인스타 피드일까?</div>
+      <div class="card edu-card">
+        <h4>고객은 "감각"을 가장 먼저 봐요</h4>
+        <p>고객님들은 감각적인 원장·샵을 좋아해요. 그 감각을 제일 먼저 보여줄 수 있는 게 바로 <b>인스타 피드</b>예요. 브랜딩 무드로 일관성 있게 정리돼 있으면 "클릭해서 더 알아보고 싶다"는 마음이 생겨요.</p>
+        <ul class="edu-list">
+          <li>뷰티샵 고객은 <b>예뻐지고 싶은 욕구</b>가 있어요 → 감성 피드가 이 욕구를 자극해요</li>
+          <li>일관된 브랜드 피드로 <b>"이 샵"을 각인</b>시킬 수 있어요</li>
+          <li>원장님의 <b>철학·마인드</b>를 보여주면 신뢰가 쌓여요</li>
+          <li>단순 기술이 아니라 <b>"내 서비스로 얻는 변화"</b>를 보여줄 수 있어요</li>
+          <li>인스타는 영상·사진·글로 설득하는 <b>강력한 플랫폼</b>이에요</li>
+        </ul>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r3"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">④ 어떤 샵에 들어가고 싶나요?</div>
+      <div class="card edu-card">
+        <h4>어떤 샵에 들어가 보고 싶으세요?</h4>
+        <img class="edu-img" src="edu-2.jpg" alt="톤이 통일된 쇼윈도와 색이 제각각인 쇼윈도 비교" loading="lazy">
+        <p class="edu-cap">왼쪽: 톤이 통일된 쇼윈도 · 오른쪽: 색이 제각각인 쇼윈도</p>
+        <p>피드도 <b>쇼윈도</b>와 똑같아요. 톤이 정돈된 곳은 들어가 보고 싶지만, 색이 제각각이면 발길이 잘 안 가요. 그래서 <b>일관된 브랜딩 무드</b>가 중요해요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r4"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑤ 어떤 샵에 방문할까요?</div>
+      <div class="card edu-card">
+        <h4>여러분이라면 어떤 샵에 방문할까요?</h4>
+        <img class="edu-img" src="edu-3.jpg" alt="브랜딩된 피드와 시술 사진만 있는 피드 비교" loading="lazy">
+        <p>왼쪽은 감성·스토리·후기가 어우러진 피드, 오른쪽은 비슷한 시술 사진만 나열된 피드예요. 같은 실력이라도 <b>첫인상</b>이 전혀 달라지죠.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r5"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑥ 감성 피드는 유입용</div>
+      <div class="card edu-card">
+        <h4>감성 피드는 "유입용" 역할이에요</h4>
+        <img class="edu-img" src="edu-8.jpg" alt="예쁜 감성 피드 예시" loading="lazy">
+        <p>보기에 예쁜 <b>감성 피드만</b>으로는 바로 예약 전환이 잘 안 돼요. 감성 피드는 어디까지나 <b>관심을 끌어오는 유입용</b>이에요.</p>
+        <p>20만원대 시술은 <b>신뢰</b>가 쌓여야 결정돼요. 그래서 감성만 채우지 말고, <b>신뢰·전문성·후기</b>를 꼭 함께 넣어야 해요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r6"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑦ 1번 — 브랜딩 잘 된 샵</div>
+      <div class="card edu-card">
+        <h4><span class="n">1번</span>브랜딩 잘 된 샵</h4>
+        <img class="edu-img" src="edu-5.jpg" alt="브랜딩이 잘 된 샵의 피드 예시" loading="lazy">
+        <p>얼굴형별 제안, 퍼스널 브로우, 창업 스토리, 고객 설명이 함께 있는 피드예요. 고객은 이렇게 느껴요:</p>
+        <div class="quote">"이 샵은 단순히 눈썹을 잘 그려주는 걸 넘어서, 내 얼굴형에 맞춰 제안도 해주고 경력도 있어 신뢰가 간다."</div>
+        <ul class="edu-list">
+          <li>얼굴형별 디자인 제안 → <b>"나한테 딱 맞게 해줄 것 같음"</b></li>
+          <li>창업 스토리·자막·인터뷰 → <b>"브랜드가 진심으로 느껴짐"</b></li>
+          <li>다양한 고객·연령층 → <b>"여러 사람에게 인정받는 느낌"</b></li>
+        </ul>
+        <div class="verdict good">➡ "한 번쯤 가보고 싶다"는 마음이 생겨요</div>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r7"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑧ 2번 — 시술 사진 위주 샵</div>
+      <div class="card edu-card">
+        <h4><span class="n">2번</span>시술 사진 위주 샵</h4>
+        <img class="edu-img" src="edu-6.jpg" alt="시술 사진만 모아둔 샵의 피드 예시" loading="lazy">
+        <p>자연스럽고 깔끔한 시술 결과 모음이에요. 기술력은 있어 보이지만, 고객은 이렇게 생각할 수 있어요:</p>
+        <div class="quote">"잘하는 것 같긴 한데… 이게 내 얼굴형에 맞는 건지 모르겠고, 그냥 다 비슷한 결과 같아."</div>
+        <ul class="edu-list">
+          <li>결과물만 있어 <b>전문가의 기준·제안</b>이 안 보여요</li>
+          <li>같은 구도·톤이라 피드에 <b>매력이 부족</b>해요</li>
+          <li>"왜 이 디자인인지" <b>설명이 없어요</b></li>
+        </ul>
+        <div class="verdict bad">➡ "그냥 기술자 느낌, 브랜드 감성 없음"</div>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r8"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑨ 로랑의 결론</div>
+      <div class="card edu-card">
+        <h4>그래서 — 로랑의 결론</h4>
+        <p>똑같은 실력이라도 고객은 <b>1번 샵</b>을 선택해요. 눈썹을 잘 그리는 건 기본이고, 거기에 <b>"나한테 맞게 디자인한다는 확신"</b>을 줘야 예약으로 이어지거든요.</p>
+        <p>그 확신은 결국 피드에 담긴 <b>브랜드 · 철학 · 사람의 감성</b>에서 나와요. 그래서 9칸을 <b>감성 + 신뢰 + 제안</b>으로 채우는 거예요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r9"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑩ 9칸, 무엇을 어디에?</div>
+      <div class="card edu-card">
+        <h4>9개 구성 가이드 (한눈에)</h4>
+        <img class="edu-img" src="edu-13.jpg" alt="9칸 피드 구성 가이드 — 위치별 배치" loading="lazy">
+        <ul class="edu-list">
+          <li><b>전·후 / 시술 사진 (4개)</b> · 2,3,5,8번 — 변화를 직관적으로</li>
+          <li><b>감성 피드 (2개)</b> · 1,6번 — 브랜드 무드·톤앤무드</li>
+          <li><b>고객 후기 (1개)</b> · 9번 — 짧고 임팩트 있게</li>
+          <li><b>전문성·위생·안정성 (1개)</b> · 4번 — 믿을 수 있는 샵</li>
+          <li><b>예약·차별화 (1개)</b> · 7번 — 인기 + 강점 어필</li>
+        </ul>
+        <div class="verdict good">➡ 욕구 자극 → 신뢰 → 전문성 → 차별화 흐름 완성</div>
+        <p style="margin-top:10px">칸별 자세한 설명은 아래 탭의 <b>「배치도」</b>에서 칸을 눌러 확인할 수 있어요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r10"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑪ "감각적인 원장만 가능한 거 아닌가요?"</div>
+      <div class="card edu-card">
+        <h4>아니에요 — 저도 처음부터는 아니었어요</h4>
+        <img class="edu-img" src="edu-25.jpg" alt="인스타 피드가 점점 브랜딩되어 간 변천사" loading="lazy">
+        <p class="edu-cap">시간이 지나며 점점 브랜딩되어 간 피드 변천사</p>
+        <img class="edu-img" src="edu-27.jpg" alt="처음엔 평범했던 피드들" loading="lazy" style="margin-top:8px">
+        <p>처음부터 감각적인 피드를 완성했던 게 아니에요. <b>하나씩 톤을 맞추고 쌓다 보니</b> 지금의 브랜딩이 된 거예요. 이 7일 가이드가 그 과정을 압축한 거라, 천천히 따라오시면 돼요 :)</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r11"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑫ 브랜딩 컬러 정하기 (월요일)</div>
+      <div class="card colorbox">
+        <p>시술 사진은 살색이라 튀는 색보다 <b>살색과 어울리는 차분한 톤</b>이 좋아요. 하나를 메인으로 정해 7일 내내 통일하세요.</p>
+        <div class="swatches" id="swatches"></div>
+        <img class="edu-img" src="edu-15.jpg" alt="시술 계정 컬러 예시" loading="lazy" style="margin-top:12px">
+        <p class="edu-cap">시술 계정 → 차분한 톤 · 핑크 / 베이지 / 브라운&핑크 <b>(로랑 추천)</b></p>
+        <img class="edu-img" src="edu-16.jpg" alt="교육 계정 컬러 예시" loading="lazy" style="margin-top:10px">
+        <p class="edu-cap">교육·강의 계정이라면 → 빨강 / 노랑 / 주황 / 초록 (눈에 띄는 톤)</p>
+        <p style="margin-top:6px">로랑는 <b>시술 계정</b>이라 차분한 톤을 추천해요. (이 앱 화면만 가이드용이라 레드예요)</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r12"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑬ 배경 색지 모으기</div>
+      <div class="card edu-card">
+        <h4>배경 색지를 핀터레스트에서 모아두기</h4>
+        <img class="edu-img" src="edu-17.jpg" alt="브랜딩 컬러에 맞춘 배경 색지 예시" loading="lazy">
+        <p>정한 브랜딩 컬러에 맞는 <b>배경 색지</b>를 핀터레스트에서 5장 이상 저장해 두면, 피드 만들 때 톤을 빠르게 맞출 수 있어요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r13"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑭ 실전 — 사진 보정</div>
+      <div class="card edu-card">
+        <h4>붉은기 빼서 피부톤 균일하게</h4>
+        <img class="edu-img" src="edu-21.jpg" alt="사진 보정 전후 — 붉은기 빼기" loading="lazy">
+        <p>시술 직후 사진은 붉은기가 있어요. <b>Meitu(메이투)</b> 앱에서 <b>색상 → HSL → 톤 올리고 → 채도 낮추기</b>로 빨강을 차분하게 만들면 9장의 피부톤이 일정해져요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r14"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑮ 실전 — 캔바로 피드 만들기</div>
+      <div class="card edu-card">
+        <h4>캔바 9:16 기본 세팅</h4>
+        <img class="edu-img" src="edu-19.jpg" alt="캔바 9:16 피드 만들기" loading="lazy">
+        <ul class="edu-list">
+          <li>캔바에서 <b>9:16 사이즈</b>로 새 디자인 만들기</li>
+          <li>핀터레스트 <b>배경 색지</b> 깔기</li>
+          <li>인물 사진은 <b>누끼 따서</b> 중앙에 배치</li>
+          <li>한글 폰트 <b>Noto Sans KR</b> · 영문 <b>The Season</b> 처럼 각 1개로 통일</li>
+        </ul>
+        <img class="edu-img" src="edu-18.jpg" alt="누끼·글씨체 통일 예시" loading="lazy" style="margin-top:10px">
+        <p class="edu-cap">직관적 B-F · 누끼 · 글씨체 통일 예시</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r15"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑯ 실전 — 영문 폰트 감성</div>
+      <div class="card edu-card">
+        <h4>영문 폰트로 감성 더하기</h4>
+        <img class="edu-img" src="edu-23.jpg" alt="캔바 영문 폰트 효과" loading="lazy">
+        <ul class="edu-list">
+          <li>핀터레스트 <b>외국 모델 사진</b> 위주로 가져오기</li>
+          <li>영문 폰트 <b>Brown Sugar</b> 활용 · 상단 영문 단어 3개 / 중간 영문 문구 / 하단 @상호명</li>
+          <li>원하는 폰트가 없으면 <b>산돌구름</b>에서 찾기</li>
+          <li>중간 영문은 <b>"들어올리기" 효과</b>로 눈에 띄게</li>
+        </ul>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r16"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑰ AI·모델 사진은 딱 1장</div>
+      <div class="card edu-card">
+        <h4>AI·모델 감성 사진은 딱 1장만</h4>
+        <img class="edu-img" src="edu-22.jpg" alt="AI 활용 모델 사진은 한장만" loading="lazy">
+        <p>예쁜 AI·외국 모델 사진은 <b>유입용</b>이라 많이 필요 없어요. 1~2장이면 충분! 나머지는 <b>신뢰·전환용</b>(원장 철학, 직관적 B-F, 차별화 카드뉴스)으로 채우세요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r17"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑱ 주의사항 & 참고</div>
+      <div class="card notes">
+        <details open><summary>꼭 지킬 8가지 원칙</summary><div class="nbody"><ul>
+          <li><b>피부색</b>은 9장 모두 균일하게 (붉은기는 톤↑·채도↓)</li>
+          <li><b>글씨체</b>는 한글·영문 각 1개로 통일</li>
+          <li>정한 <b>브랜딩 컬러 무드</b>로 9장 전체 맞추기</li>
+          <li>AI·핀터레스트 <b>감성은 1~2개만</b></li>
+          <li><b>신뢰·전환용 피드에 집중</b> (원장 모습·예약마감·연습·철학)</li>
+          <li>정보성 카드뉴스로 <b>"믿을 만한 원장"</b> 보여주기</li>
+          <li>AI 사진도 <b>같은 컬러·무드</b>로</li>
+          <li><b>전·후를 명확하게</b></li>
+        </ul></div></details>
+        <details><summary>쇼윈도 vs 상담실 피드</summary><div class="nbody">
+          <table class="cmp">
+            <tr><th></th><th class="h1c">쇼윈도(감성)</th><th class="h2c">상담실(신뢰)</th></tr>
+            <tr><th>목표</th><td>시선·유입</td><td>의심해소·결제</td></tr>
+            <tr><th>콘텐츠</th><td>예쁜 결과물</td><td>과정·후기·철학</td></tr>
+            <tr><th>반응</th><td>좋아요·저장</td><td>상담·예약</td></tr>
+            <tr><th>결과</th><td>도달↑ 전환↓</td><td>전환↑</td></tr>
+          </table>
+        </div></details>
+        <details><summary>로랑 작성 원칙 (꼭!)</summary><div class="nbody"><ul>
+          <li>친근한 <b>존댓말</b>, 로랑 톤 유지</li>
+          <li>"무조건·100%·영구적·통증없음" 등 <b>단정·과장 금지</b></li>
+          <li>전·후엔 항상 <b>개인차 안내</b> 한 줄</li>
+          <li>후기·예약 캡쳐는 <b>동의받은 것만</b></li>
+          <li>철학: <b>"눈썹이 아닌, 자신감을 그려드립니다"</b></li>
+        </ul></div></details>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r18"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑲ 예쁘게만 꾸민다고 문의가 올까?</div>
+      <div class="card edu-card">
+        <h4>그건 아니에요</h4>
+        <p>감성 피드는 <b>무조건 1단계 — 유입용</b>이에요. "이 샵 일관되게 감각적이네, 더 알아보고 싶다" → 사진 클릭, 스크롤하며 <b>전체 피드를 보게</b> 만들어줘요.</p>
+        <div class="quote">예쁘게 꾸며놓는 것만으로 바로 예약 문의가 오진 않아요.</div>
+        <p>여기에 <b>2단계 — 브랜딩 피드(신뢰·전환용)</b>까지 함께 갖춰야 <b>예약 문의 전환</b>까지 이어져요. 그래서 9칸에 감성 + 신뢰를 같이 담는 거예요.</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r19"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">⑳ 브랜딩 전·후 사례</div>
+      <div class="card edu-card">
+        <h4>평범한 피드 → 브랜딩된 피드</h4>
+        <p>같은 시술 사진이라도 톤·글씨체·구성을 정리하면 계정 첫인상이 확 달라져요. 왼쪽이 정리 전(BEFORE), 오른쪽이 브랜딩 후(AFTER)예요. 옆으로 넘겨 보세요.</p>
+        <div class="ba-scroll">
+          <figure class="ba"><img src="edu-28.jpg" alt="입술 피드 전후" loading="lazy"><figcaption>립 · Lip</figcaption></figure>
+          <figure class="ba"><img src="edu-29.jpg" alt="눈썹 피드 전후" loading="lazy"><figcaption>브로우 · Brow</figcaption></figure>
+          <figure class="ba"><img src="edu-30.jpg" alt="래쉬 피드 전후" loading="lazy"><figcaption>래쉬 · Lash</figcaption></figure>
+          <figure class="ba"><img src="edu-31.jpg" alt="네일 피드 전후" loading="lazy"><figcaption>네일 · Nail</figcaption></figure>
+          <figure class="ba"><img src="edu-32.jpg" alt="종합 피드 전후" loading="lazy"><figcaption>종합 · RE:WE</figcaption></figure>
+        </div>
+        <p class="edu-cap">← 좌우로 넘겨서 전·후를 비교해 보세요</p>
+        <label class="readrow"><input type="checkbox" class="readchk" data-key="r20"><span class="rk-txt">읽었어요</span></label>
+      </div>
+
+      <div class="sec-title">🎉 다 읽으셨어요!</div>
+      <div class="fin-read">
+        <div class="fr-em">📖 → 🚀</div>
+        <h3>준비 끝! 이제 직접 만들 차례예요</h3>
+        <p>읽은 내용을 떠올리며 월요일 미션부터<br>하루 한 장씩 따라가면 7일 만에 9피드 완성!</p>
+        <button class="readfirst" onclick="nav('guide')">
+          <div class="rf-top"><span class="rf-step">START</span><span class="rf-arrow">›</span></div>
+          <div class="rf-title">이제 미션 시작하기 🚀</div>
+          <div class="rf-sub">월요일 미션부터 하루 한 장씩</div>
+          <span class="rf-btn">7일 가이드로 가기 →</span>
+        </button>
+
+        <div class="offer">
+          <div class="offer-h">한 단계 더 가고 싶다면 ✦</div>
+          <button class="offer-card o17" onclick="open17()">
+            <div class="o-top"><span class="o-tag">STEP 1</span><span class="o-price"><s class="o-was">39만</s> 23만원</span></div>
+            <div class="o-title">인스타 기본구성 + 피드체인지 영상 + 카페 피드백</div>
+            <div class="o-sub">템플릿·제작 영상 + 카페 피드백까지 · 신청하기 →</div>
+          </button>
+          <button class="offer-card o79" onclick="open79()">
+            <div class="o-top"><span class="o-tag gold">STEP 2 · 본편</span><span class="o-price">79만원</span></div>
+            <div class="o-title">예약 터지는 콘텐츠 전자강의</div>
+            <div class="o-sub">카피·릴스·전환 + <b>오프라인 코칭·과제 피드백</b><br>지금 신청 시 23만원 차감 · 신청하기 →</div>
+          </button>
+          <button class="kakao-btn small" onclick="openKakao()">💬 궁금한 건 카카오 채널로 물어보세요</button>
+        </div>
+
+        <div class="reset-row"><button onclick="resetAll()">↺ 전체 체크 초기화</button></div>
+      </div>
+      </div><!-- /isource -->
+    </section>
+
+  </div><!-- /screens -->
+
+  <!-- TAB BAR -->
+  <nav class="tabbar">
+    <button class="tab on" data-go="home" onclick="nav('home')">
+      <svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h12v-9"/></svg>홈</button>
+    <button class="tab" data-go="guide" onclick="nav('guide')"><span class="dot"></span>
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>가이드</button>
+    <button class="tab" data-go="grid" onclick="nav('grid')">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>배치도</button>
+    <button class="tab" data-go="check" onclick="nav('check')">
+      <svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>점검</button>
+  </nav>
+
+  <!-- LEAD GATE (맨 먼저) -->
+  <div class="gate" id="gate">
+    <div class="gate-inner">
+      <div class="gate-badge">FREE CHALLENGE</div>
+      <h2 class="gate-title">첫인상 9개<br>피드 체인지 <span>챌린지</span></h2>
+      <p class="gate-sub">성함·연락처를 남기고 <b>카카오 채널</b>을 추가하면<br>바로 챌린지를 시작할 수 있어요.</p>
+
+      <button class="gate-video" onclick="openVideo()">
+        <span class="gv-play">▶</span>
+        <span class="gv-txt"><b>맛보기 영상 먼저 보기</b><br><small>9개 피드체인지 3분 무료 공개</small></span>
+      </button>
+
+      <label class="gate-lab">성함</label>
+      <input class="gate-input" id="leadName" type="text" placeholder="홍길동" autocomplete="name">
+
+      <label class="gate-lab">연락처</label>
+      <input class="gate-input" id="leadPhone" type="tel" inputmode="numeric" placeholder="010-0000-0000" autocomplete="tel">
+
+      <button class="gate-kakao" id="gateKakao" onclick="addChannel()">
+        <span id="gateKakaoTxt">💬 카카오톡 채널 추가하기 (필수)</span>
+      </button>
+
+      <button class="gate-start off" id="gateStart" onclick="startChallenge()">신청 완료 · 챌린지 시작하기 →</button>
+      <p class="gate-note" id="gateMsg">성함·연락처 입력 + 카카오 채널 추가 후 시작할 수 있어요.</p>
+      <button class="gate-skip" onclick="skipGate()">이미 신청했어요</button>
+    </div>
+  </div>
+
+  <!-- install banner -->
+  <div id="installBanner">
+    <button class="x" onclick="dismissInstall()">✕</button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="icon-192.png" alt="" style="width:42px;height:42px;border-radius:11px;">
+      <div id="installText" style="flex:1;color:var(--ink);font-weight:700;"></div>
+      <button id="androidInstall" onclick="doAndroidInstall()" style="display:none;border:none;
+        background:var(--red);color:#fff;font-weight:800;font-size:12px;padding:9px 14px;
+        border-radius:10px;cursor:pointer;">설치</button>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+/* ================= DATA ================= */
+const CAT={prep:{cls:'cat-prep',tag:'준비',color:'#D8A85A'},
+  trust:{cls:'cat-trust',tag:'신뢰용',color:'#E07B96'},
+  emo:{cls:'cat-emo',tag:'감성용',color:'#E08A72'}};
+const DAYS=[
+  {id:'mon',d:'월',cat:'prep',title:'브랜딩 컬러 세팅',mission:'컬러 정하기 + 사진 보정',
+   desc:'9개 피드의 전체 톤을 결정하는 날이에요. 색을 먼저 정해두면 나머지 6일이 흔들리지 않습니다.',
+   tip:'브로우는 시술 사진이 살색이라, 튀는 색보다 살색과 어울리는 차분한 색이 좋아요. 베이지·핑크·브라운 중 하나를 메인으로.',
+   fill:'전체 무드의 기준',
+   tasks:['메인 브랜딩 컬러 1개 정하기 (베이지/핑크/브라운)','핀터레스트에서 배경 색지 5장 이상 저장','한글 폰트 1개 + 영문 폰트 1개 정하기','기존 사진 보정 — 피부색 균일하게, 붉은기 빼기']},
+  {id:'tue',d:'화',cat:'trust',title:'전·후(B-F) 신뢰 피드 4개',mission:'직관적인 변화 보여주기',
+   desc:'After는 또렷한 인물 사진, Before는 시술 전 눈썹 사진 + 설명글. "이 변화가 나에게도?"를 느끼게 하는 핵심 피드예요.',
+   tip:'4장을 같은 구도·톤으로 통일하세요. 캡션엔 "왜 이 디자인인지" 얼굴형 근거를 한 줄. 단정적 표현은 피하고 개인차 안내 포함.',
+   fill:'2 · 3 · 5 · 8번 칸',
+   tasks:['B-F 피드 ① (After 인물 + Before 눈썹 + 설명)','B-F 피드 ②','B-F 피드 ③','B-F 피드 ④','4장 톤·글씨체 통일 확인']},
+  {id:'wed',d:'수',cat:'trust',title:'차별화 가치 카드뉴스',mission:'우리샵만의 가치 5장',
+   desc:'1:1 퍼스널 디자인이 왜 다른지, 로랑만의 차별화 가치를 카드뉴스(5장)로 풀어내요.',
+   tip:'"눈썹이 아닌 자신감을 그려드립니다" 철학을 녹이기. 가격·효능 단정은 금지, 마지막 장에 예약 안내(행동 유도).',
+   fill:'7번 칸 (예약·차별화)',
+   tasks:['차별화 포인트 5가지 정리','카드뉴스 5장 제작 (표지 + 내용 4장)','캡션에 철학 + 예약 행동유도 넣기']},
+  {id:'thu',d:'목',cat:'emo',title:'욕구 자극 감성 피드',mission:'예뻐지고 싶게 만들기',
+   desc:'핀터레스트 외국모델 / AI 모델 사진을 활용한 유입용 감성 피드. 딱 1장이면 충분해요.',
+   tip:'반드시 정한 브랜딩 컬러·무드와 같은 톤으로. 감성 피드는 감성 피드일 뿐, 1~2개만!',
+   fill:'1번 칸',
+   tasks:['핀터레스트/AI 감성 이미지 선택 (브랜딩 컬러 톤)','영문 단어 3개 + 중간 영문 문구 + @계정명 배치','감성 피드 1장 완성']},
+  {id:'fri',d:'금',cat:'emo',title:'인기 많아 보이는 샵 피드',mission:'활기·예약 활발한 느낌',
+   desc:'예약이 활발한 샵처럼 보이게 하는 피드. 예약 마감 캡쳐 모음, 활기 있는 분위기로 "여기 인기 있네" 인상을 줘요.',
+   tip:'실제 동의받은 예약 캡쳐만 사용하고, 개인정보는 가리세요. 과장은 금물.',
+   fill:'6번 칸',
+   tasks:['예약 확정/마감 캡쳐 모으기 (동의된 것만)','인기 샵 느낌 피드 1장 제작']},
+  {id:'sat',d:'토',cat:'trust',title:'후기 모음집 피드',mission:'첫인상에서 신뢰 형성',
+   desc:'짧고 임팩트 있게 정리한 후기 모음. 9칸 안에 후기가 하나 있으면 첫인상에서 신뢰가 확 올라가요.',
+   tip:'실제 동의받은 후기만 사용. 이름·연락처 등 개인정보는 꼭 가리기.',
+   fill:'9번 칸',
+   tasks:['동의받은 후기 3~5개 선별','후기 모음 피드/카드뉴스 제작']},
+  {id:'sun',d:'일',cat:'trust',title:'전문성 + 9칸 최종 정렬',mission:'마무리 · 믿음 주는 마침표',
+   desc:'원장님의 전문성·위생·안정성을 보여주는 콘텐츠를 만들고, 마지막으로 9칸 배치를 순서대로 맞춰 완성해요.',
+   tip:'위생관리, 연습 고무판, 스킬업 모습 등. 캡션에 나의 철학을 담기. 다 만든 뒤 「필수 점검 10가지」를 통과하면 완성!',
+   fill:'4번 칸 + 전체 정렬',
+   tasks:['전문성/위생 피드 1장 제작 (4번 칸)','9개 피드를 배치도 순서대로 정렬','「필수 점검 10가지」 통과 확인']}
+];
+const GRID=[
+  {pos:1,type:'emo',ico:'✦',nm:'감성',title:'감성 피드',when:'목요일 제작',desc:'브랜딩 컬러와 맞는 무드 사진. 계정 전체의 분위기·톤앤무드를 잡는 자리예요.'},
+  {pos:2,type:'bf',ico:'↔',nm:'전·후',title:'Before & After',when:'화요일 제작',desc:'고객의 변화를 직관적으로. 예뻐지고 싶은 욕구를 자극하는 핵심 칸.'},
+  {pos:3,type:'bf',ico:'↔',nm:'전·후',title:'Before & After',when:'화요일 제작',desc:'단순한 눈썹문신을 넘어 고객의 고민을 해결해주는 변화를 보여주세요.'},
+  {pos:4,type:'pro',ico:'✓',nm:'전문성',title:'전문성·위생·안정성',when:'일요일 제작',desc:'원장님의 전문적인 모습·위생관리·안전성 강조. "믿을 수 있는 샵" 이미지를 구축.'},
+  {pos:5,type:'bf',ico:'↔',nm:'전·후',title:'Before & After',when:'화요일 제작',desc:'또렷한 전·후 대비로 기술력과 결과를 증명하는 자리.'},
+  {pos:6,type:'emo',ico:'✦',nm:'감성',title:'감성 피드',when:'금요일 제작',desc:'인기 많아 보이는 무드 / 감성 사진. 유입과 브랜드 인상을 담당.'},
+  {pos:7,type:'diff',ico:'★',nm:'예약·차별화',title:'예약 · 차별화 포인트',when:'수요일 제작',desc:'예약이 활발한 샵처럼 보이게 + 다른 샵과 차별화되는 강점 어필.'},
+  {pos:8,type:'bf',ico:'↔',nm:'전·후',title:'Before & After',when:'화요일 제작',desc:'네 번째 전·후 컷. 4칸이 모이면 "결과가 일관되게 좋다"는 신뢰가 생겨요.'},
+  {pos:9,type:'rev',ico:'❝',nm:'후기',title:'고객 후기',when:'토요일 제작',desc:'짧고 임팩트 있게. 첫인상에서 신뢰감을 형성하는 마지막 한 칸.'}
+];
+const TYPECOLOR={bf:'#D26A86',emo:'#DD8463',rev:'#C49A4E',pro:'#5CA982',diff:'#A488D6'};
+const TYPECLASS={bf:'t-bf',emo:'t-emo',rev:'t-rev',pro:'t-pro',diff:'t-diff'};
+const CHECK10=['예뻐지고 싶은 욕구를 자극하는가?','신뢰를 주는 피드가 있는가?','고객님의 문제를 해결해 주는가?','나의 서비스가 어떤 가치를 주는가?','어떤 철학을 갖고 일하는가?','예약이 많은 인기 있는 샵인가?','전문성을 드러내는가?','전/후가 명확한가?','차별화 포인트가 보이는가?','행동 유도가 명확한가?'];
+const SWATCH=[{nm:'베이지',hx:'#D8C5A8'},{nm:'핑크',hx:'#F3D9DC'},{nm:'브라운핑크',hx:'#CBA89B'},{nm:'브라운베이지',hx:'#B79B7E'}];
+const TITLES={home:'로랑',guide:'7일 가이드',grid:'9칸 배치도',check:'필수 점검',info:'전략 · 컬러'};
+
+/* ================= LINKS (원장 수정) ================= */
+const LINK_FORM='https://docs.google.com/forms/d/1LedSA_70_P1bOoCvMdHuDj-nI-Qq7OM-Rgly9Ko8KTQ/viewform'; /* 챌린지 신청서(구글폼 응답용) */
+const LINK_VIDEO='https://laurent.liveklass.com/classes/308207/classroom/1378943/'; /* 9개 피드체인지 맛보기 영상(무료) */
+const LINK_KAKAO='https://pf.kakao.com/_mcdQn';   /* 카카오톡 채널 */
+const LINK_CHAT='https://open.kakao.com/o/gaaOHIUg';   /* 단톡방(오픈채팅) */
+const LINK_79='https://laurent.liveklass.com/classes/294975';
+const LINK_17='https://laurent.liveklass.com/classes/308207';  /* 인스타 기본구성+피드체인지+카페 피드백 (23만원) */
+
+function openKakao(){ window.open(LINK_KAKAO,'_blank','noopener'); }
+function openForm(){ window.open(LINK_FORM,'_blank','noopener'); }
+function openVideo(){ window.open(LINK_VIDEO,'_blank','noopener'); }
+function open79(){ window.open(LINK_79,'_blank','noopener'); }
+function open17(){
+  if(LINK_17){ window.open(LINK_17,'_blank','noopener'); }
+  else { alert('17만원 패키지는 곧 오픈해요! 단톡방에서 가장 먼저 안내드릴게요 😊'); }
+}
+
+/* ================= LEAD GATE ================= */
+const LEAD_KEY='nuadi_lead_v3';
+const LEAD_DRAFT='nuadi_lead_draft_v3';   /* 진행 중 임시저장 (뒤로가기 복구용) */
+let channelAdded=false;
+function saveDraft(){
+  localStorage.setItem(LEAD_DRAFT,JSON.stringify({
+    name:document.getElementById('leadName').value,
+    phone:document.getElementById('leadPhone').value,
+    ch:channelAdded?1:0
+  }));
+}
+function markChannelDone(){
+  channelAdded=true;
+  document.getElementById('gateKakao').classList.add('done');
+  document.getElementById('gateKakaoTxt').textContent='✓ 카카오 채널 추가 완료';
+}
+function gateValid(){
+  const n=document.getElementById('leadName').value.trim();
+  const p=(document.getElementById('leadPhone').value.match(/\d/g)||[]).length;
+  return n.length>=2 && p>=9 && channelAdded;
+}
+function refreshGate(){
+  document.getElementById('gateStart').classList.toggle('off',!gateValid());
+}
+function addChannel(){
+  markChannelDone(); saveDraft();
+  const m=document.getElementById('gateMsg'); m.classList.remove('err');
+  m.textContent='채널 추가됐어요! 성함·연락처까지 채우면 시작 ✦';
+  refreshGate();
+  window.open(LINK_KAKAO,'_blank','noopener');
+}
+function startChallenge(){
+  const name=document.getElementById('leadName').value.trim();
+  const phone=document.getElementById('leadPhone').value.trim();
+  const m=document.getElementById('gateMsg');
+  if(name.length<2){ m.textContent='성함을 입력해 주세요.'; m.classList.add('err'); return; }
+  if((phone.match(/\d/g)||[]).length<9){ m.textContent='연락처를 정확히 입력해 주세요.'; m.classList.add('err'); return; }
+  if(!channelAdded){ m.textContent='카카오 채널을 먼저 추가해 주세요 💬'; m.classList.add('err'); return; }
+  localStorage.setItem(LEAD_KEY,JSON.stringify({name:name,phone:phone,t:Date.now()}));
+  localStorage.removeItem(LEAD_DRAFT);
+  closeGate();
+}
+function openChat(){ window.open(LINK_CHAT,'_blank','noopener'); }
+function skipGate(){ localStorage.setItem(LEAD_KEY,JSON.stringify({skip:1,t:Date.now()})); localStorage.removeItem(LEAD_DRAFT); closeGate(); }
+function closeGate(){ document.getElementById('gate').classList.add('hide'); }
+function initGate(){
+  const gate=document.getElementById('gate');
+  if(!gate) return;
+  if(localStorage.getItem(LEAD_KEY)){ gate.classList.add('hide'); return; }
+  /* 뒤로가기/새로고침 시 진행 중이던 입력 복구 */
+  try{
+    const d=JSON.parse(localStorage.getItem(LEAD_DRAFT)||'{}');
+    if(d.name) document.getElementById('leadName').value=d.name;
+    if(d.phone) document.getElementById('leadPhone').value=d.phone;
+    if(d.ch) markChannelDone();
+  }catch(e){}
+  document.getElementById('leadName').addEventListener('input',()=>{saveDraft();refreshGate();});
+  document.getElementById('leadPhone').addEventListener('input',()=>{saveDraft();refreshGate();});
+  refreshGate();
+}
+
+/* ================= STATE ================= */
+const STORE='nuadi_9feed_v2';
+let state=JSON.parse(localStorage.getItem(STORE)||'{}');
+function save(){localStorage.setItem(STORE,JSON.stringify(state));}
+let step=0;
+const todayIdx=(new Date().getDay()+6)%7;
+let histStack=['home'];
+
+/* ================= BUILD GUIDE PAGES ================= */
+const track=document.getElementById('track');
+DAYS.forEach((day,di)=>{
+  const c=CAT[day.cat];
+  const tasks=day.tasks.map((t,i)=>{
+    const key=day.id+'_'+i;
+    return `<li><label><input type="checkbox" class="task" data-key="${key}" data-day="${day.id}" ${state[key]?'checked':''}><span class="txt">${t}</span></label></li>`;
+  }).join('');
+  const page=document.createElement('div');
+  page.className='page';page.dataset.idx=di;
+  page.innerHTML=`
+    <div class="tap-hint">DAY ${di+1} / 7 · 화면을 넘기거나 아래 <b>다음 ›</b></div>
+    <div class="p-head">
+      <div class="p-day" style="background:${c.color}">${day.d}</div>
+      <div class="p-headtxt">
+        <span class="p-cat ${c.cls}">${c.tag}</span>
+        <div class="p-title">${day.title}</div>
+        <div class="p-mission">${day.mission}</div>
+      </div>
+    </div>
+    <p class="p-desc">${day.desc}</p>
+    <div class="tipbox"><span class="t">⌑ 로랑 팁</span><p>${day.tip}</p></div>
+    <div class="fillin">채울 칸 → <b>${day.fill}</b></div>
+    <ul class="tasks">${tasks}</ul>`;
+  track.appendChild(page);
+});
+const fin=document.createElement('div');
+fin.className='page';fin.dataset.idx=DAYS.length;
+fin.innerHTML=`<div class="finale">
+  <div class="em">🎉</div>
+  <h2>7일 챌린지 완성!</h2>
+  <p>욕구 자극 → 신뢰 → 전문성 → 차별화까지<br>균형 잡힌 9개 피드가 준비됐어요.</p>
+  <p style="color:var(--red-d);font-weight:800">마지막으로 필수 점검 10가지만 확인하면 끝!</p>
+  <button class="fbtn" onclick="nav('check')">필수 점검하러 가기 →</button>
+  <button class="fbtn ghost" onclick="nav('home')">홈으로</button>
+
+  <div class="offer">
+    <div class="offer-h">한 단계 더 가고 싶다면 ✦</div>
+    <button class="offer-card o17" onclick="open17()">
+      <div class="o-top"><span class="o-tag">STEP 1</span><span class="o-price"><s class="o-was">39만</s> 23만원</span></div>
+      <div class="o-title">인스타 기본구성 + 피드체인지 영상 + 카페 피드백</div>
+      <div class="o-sub">템플릿·제작 영상 + 카페 피드백까지 · 신청하기 →</div>
+    </button>
+    <button class="offer-card o79" onclick="open79()">
+      <div class="o-top"><span class="o-tag gold">STEP 2 · 본편</span><span class="o-price">79만원</span></div>
+      <div class="o-title">예약 터지는 콘텐츠 전자강의</div>
+      <div class="o-sub">카피·릴스·전환 + <b>오프라인 코칭·과제 피드백</b><br>지금 신청 시 23만원 차감 · 신청하기 →</div>
+    </button>
+    <button class="kakao-btn small" onclick="openKakao()">💬 궁금한 건 카카오 채널로 물어보세요</button>
+  </div>
+</div>`;
+track.appendChild(fin);
+
+const TOTAL_PAGES=DAYS.length+1;
+const dotsEl=document.getElementById('dots');
+for(let i=0;i<TOTAL_PAGES;i++){
+  const dot=document.createElement('div');
+  dot.className='dot'+(i===DAYS.length?' fin':'');
+  dot.onclick=()=>goStep(i);
+  dotsEl.appendChild(dot);
+}
+
+/* ================= GUIDE NAV ================= */
+function goStep(i){
+  step=Math.max(0,Math.min(TOTAL_PAGES-1,i));
+  track.style.transform=`translateX(${-step*100}%)`;
+  updateFoot();
+  const pg=track.children[step]; if(pg) pg.scrollTop=0;
+}
+function nextStep(){ if(step<TOTAL_PAGES-1) goStep(step+1); }
+function updateFoot(){
+  const pfoot=document.getElementById('pfoot');
+  pfoot.style.display=(step===DAYS.length)?'none':'flex';
+  document.getElementById('prevBtn').disabled=(step===0);
+  document.getElementById('nextBtn').textContent=(step===DAYS.length-1)?'완료 🎉':'다음 ›';
+  [...dotsEl.children].forEach((dot,i)=>{
+    dot.classList.toggle('cur',i===step);
+    if(i<DAYS.length){
+      const day=DAYS[i];
+      const allDone=day.tasks.every((_,k)=>state[day.id+'_'+k])&&day.tasks.length>0;
+      dot.classList.toggle('done',allDone&&i!==step);
+    }
+  });
+}
+let tsx=0,tsy=0;
+const pager=document.querySelector('.pager');
+pager.addEventListener('touchstart',e=>{tsx=e.touches[0].clientX;tsy=e.touches[0].clientY;},{passive:true});
+pager.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tsx, dy=e.changedTouches[0].clientY-tsy;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.4){ dx<0?nextStep():goStep(step-1); }
+},{passive:true});
+track.addEventListener('click',e=>{
+  if(e.target.closest('label,input,button,a,summary,.tipbox')) return;
+  if(step<DAYS.length) nextStep();
+});
+
+/* ================= GRID ================= */
+const grid=document.getElementById('grid9');
+const IMGSTORE='nuadi_feed_imgs_v1';
+let IMGS=JSON.parse(localStorage.getItem(IMGSTORE)||'{}');
+let gridMode='guide', pendingPos=null;
+function saveImgs(){
+  try{ localStorage.setItem(IMGSTORE,JSON.stringify(IMGS)); }
+  catch(err){ alert('저장 공간이 부족해요. 사진 수를 줄이거나 다른 사진을 지워주세요.'); }
+}
+function renderGrid(){
+  grid.innerHTML='';
+  GRID.forEach(g=>{
+    const b=document.createElement('button');
+    b.className='cell '+TYPECLASS[g.type];
+    b.dataset.pos=g.pos;
+    const img=IMGS[g.pos];
+    if(img){
+      b.classList.add('filled');
+      b.innerHTML=`<img class="cell-img" src="${img}" alt="">`+
+        `<span class="pos">${g.pos}</span>`+
+        (gridMode==='mine'?`<span class="cell-x">✕</span>`:'');
+    }else{
+      if(gridMode==='mine') b.classList.add('addmode');
+      b.innerHTML=`<span class="pos">${g.pos}</span><span class="ico">${g.ico}</span><span class="nm">${g.nm}</span>`+
+        (gridMode==='mine'?`<span class="cell-add">＋ 사진 올리기</span>`:'');
+    }
+    b.onclick=(e)=>handleCell(e,g,b);
+    grid.appendChild(b);
+  });
+}
+function handleCell(e,g,b){
+  if(e.target.classList.contains('cell-x')){
+    e.stopPropagation();
+    if(confirm(g.pos+'번 칸 사진을 지울까요?')){ delete IMGS[g.pos]; saveImgs(); renderGrid(); }
+    return;
+  }
+  if(gridMode==='mine'){
+    pendingPos=g.pos;
+    document.getElementById('cellFile').click();
+  }else{
+    showCell(g,b);
+  }
+}
+function setGridMode(m){
+  gridMode=m;
+  document.getElementById('gmGuide').classList.toggle('on',m==='guide');
+  document.getElementById('gmMine').classList.toggle('on',m==='mine');
+  document.getElementById('cellDetail').style.display=(m==='mine')?'none':'block';
+  document.getElementById('gridNote').style.display=(m==='mine')?'block':'none';
+  document.getElementById('gridHint').textContent=(m==='mine')
+    ? '빈 칸을 탭해 내가 만든 피드를 올리고, ✕로 지워요'
+    : '칸을 탭하면 무엇을·언제 만들지 알려줘요';
+  renderGrid();
+}
+function downscaleImg(dataUrl,maxW,cb){
+  const im=new Image();
+  im.onload=()=>{
+    const scale=Math.min(1,maxW/im.width);
+    const w=Math.round(im.width*scale), h=Math.round(im.height*scale);
+    const c=document.createElement('canvas'); c.width=w; c.height=h;
+    c.getContext('2d').drawImage(im,0,0,w,h);
+    try{ cb(c.toDataURL('image/jpeg',0.72)); }catch(err){ cb(dataUrl); }
+  };
+  im.onerror=()=>cb(dataUrl);
+  im.src=dataUrl;
+}
+document.getElementById('cellFile').addEventListener('change',function(){
+  const f=this.files&&this.files[0];
+  this.value='';
+  if(!f||pendingPos==null)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    downscaleImg(ev.target.result,640,url=>{ IMGS[pendingPos]=url; saveImgs(); renderGrid(); pendingPos=null; });
+  };
+  reader.readAsDataURL(f);
+});
+function showCell(g,b){
+  document.querySelectorAll('.cell').forEach(c=>c.classList.remove('sel'));
+  if(b) b.classList.add('sel');
+  const d=document.getElementById('cellDetail');
+  d.style.opacity=0;
+  setTimeout(()=>{
+    d.innerHTML=`<div class="dh"><span class="badge" style="background:${TYPECOLOR[g.type]}">${g.pos}번 칸</span><span class="dt">${g.title}</span></div><p>${g.desc}</p><div class="when">⏱ ${g.when}</div>`;
+    d.style.opacity=1;
+  },120);
+}
+renderGrid();
+
+/* ================= CHECK / SWATCH ================= */
+const c10=document.getElementById('check10');
+CHECK10.forEach((q,i)=>{
+  const key='c10_'+i;
+  const li=document.createElement('li');
+  li.innerHTML=`<label><span class="qn">${i+1}</span><input type="checkbox" class="task10" data-key="${key}" ${state[key]?'checked':''}><span class="qt">${q}</span></label>`;
+  c10.appendChild(li);
+});
+const sw=document.getElementById('swatches');
+SWATCH.forEach(s=>{
+  const d=document.createElement('div');d.className='sw';
+  d.innerHTML=`<div class="chip" style="background:${s.hx}"></div><div class="nm">${s.nm}</div><div class="hx">${s.hx}</div>`;
+  sw.appendChild(d);
+});
+
+/* ================= ROUTER ================= */
+function setScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.go===id));
+  document.getElementById('appbar').classList.toggle('show-back',id==='info');
+  if(id==='home'){document.getElementById('appTitle').innerHTML='<span class="brand">LAURENT</span>';}
+  else{document.getElementById('appTitle').textContent=TITLES[id]||'로랑';}
+  const el=document.getElementById(id); if(el) el.scrollTop=0;
+}
+function nav(id){ histStack=[id]; setScreen(id); }
+function openInfo(){ histStack.push('info'); setScreen('info'); goIStep(0); }
+function back(){ histStack.pop(); setScreen(histStack[histStack.length-1]||'home'); }
+function startToday(){ nav('guide'); goStep(todayIdx); }
+
+/* ===== INFO PAGER (한 장씩 읽기) ===== */
+let iStep=0, iTotal=0;
+const itrack=document.getElementById('itrack');
+function buildInfoPager(){
+  const src=document.getElementById('isource');
+  if(!src||!itrack) return;
+  const nodes=[...src.children];
+  let cur=null;
+  nodes.forEach(n=>{
+    if(n.classList.contains('sec-title')||!cur){
+      cur=document.createElement('div'); cur.className='ipage'; itrack.appendChild(cur);
+    }
+    cur.appendChild(n);
+  });
+  src.remove();
+  iTotal=itrack.children.length;
+  const idots=document.getElementById('idots');
+  for(let i=0;i<iTotal;i++){
+    const d=document.createElement('div'); d.className='dot'; d.onclick=()=>goIStep(i); idots.appendChild(d);
+  }
+  goIStep(0);
+}
+function goIStep(i){
+  if(!iTotal) return;
+  iStep=Math.max(0,Math.min(iTotal-1,i));
+  itrack.style.transform=`translateX(${-iStep*100}%)`;
+  document.getElementById('iprev').disabled=(iStep===0);
+  document.getElementById('inext').textContent=(iStep===iTotal-1)?'처음으로 ↑':'다음 ›';
+  [...document.getElementById('idots').children].forEach((d,k)=>d.classList.toggle('cur',k===iStep));
+  document.getElementById('iprogFill').style.width=((iStep+1)/iTotal*100)+'%';
+  const pg=itrack.children[iStep]; if(pg) pg.scrollTop=0;
+}
+function nextIStep(){ goIStep(iStep<iTotal-1 ? iStep+1 : 0); }
+(function(){
+  const pager=document.querySelector('.ipager');
+  if(!pager) return;
+  let sx=0,sy=0;
+  pager.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  pager.addEventListener('touchend',e=>{
+    if(e.target.closest('.ba-scroll')) return;  /* 전·후 가로 스크롤은 제외 */
+    const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.4){ dx<0?nextIStep():goIStep(iStep-1); }
+  },{passive:true});
+})();
+
+/* ================= PROGRESS ================= */
+function updateProgress(){
+  const all=document.querySelectorAll('.task');
+  const done=[...all].filter(c=>c.checked).length, total=all.length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('ringFg').style.strokeDashoffset=263.9*(1-pct/100);
+  document.getElementById('ringPct').textContent=pct;
+  document.getElementById('ringCnt').textContent=done+' / '+total+' 미션';
+  const msg=document.getElementById('ringMsg');
+  if(pct===0)msg.textContent='월요일 미션부터 시작해 보세요 ✦';
+  else if(pct===100)msg.textContent='🎉 9개 피드 완성! 점검 10가지를 확인하세요';
+  else if(pct>=70)msg.textContent='거의 다 왔어요! 신뢰용 피드로 마무리 ✦';
+  else if(pct>=40)msg.textContent='절반 돌파! 이대로 꾸준히 ✦';
+  else msg.textContent='좋아요, 하나씩 채워가는 중 ✦';
+  updateFoot();
+  const tDay=DAYS[todayIdx];
+  const todayDone=tDay.tasks.every((_,k)=>state[tDay.id+'_'+k]);
+  document.querySelector('.tab[data-go="guide"]').classList.toggle('alert',!todayDone&&pct<100);
+}
+function renderToday(){
+  const day=DAYS[todayIdx],c=CAT[day.cat];
+  const td=document.getElementById('todayDay');
+  td.textContent=day.d; td.style.background=c.color;
+  document.getElementById('todayTitle').textContent=day.title;
+  document.getElementById('todaySub').textContent=day.mission;
+  const done=day.tasks.every((_,k)=>state[day.id+'_'+k]);
+  document.getElementById('todayLab').innerHTML=done?'✓ 오늘 미션 완료!':'★ 오늘의 미션';
+  document.getElementById('todayBtn').textContent=done?'다시 보기 →':'오늘 미션 시작하기 →';
+}
+
+/* ================= EVENTS ================= */
+document.addEventListener('change',e=>{
+  if(e.target.matches('input[type=checkbox]')){
+    const k=e.target.dataset.key;
+    if(e.target.checked)state[k]=1;else delete state[k];
+    save();updateProgress();renderToday();updateReadProgress();
+  }
+});
+function updateReadProgress(){
+  const all=document.querySelectorAll('.readchk');
+  const done=[...all].filter(c=>c.checked).length;
+  const de=document.getElementById('readDone'),te=document.getElementById('readTotal'),fe=document.getElementById('readFill');
+  if(de)de.textContent=done;
+  if(te)te.textContent=all.length;
+  if(fe)fe.style.width=(all.length?done/all.length*100:0)+'%';
+}
+function resetAll(){
+  if(!confirm('모든 체크를 초기화할까요?'))return;
+  state={};save();
+  document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);
+  updateProgress();renderToday();updateReadProgress();
+}
+
+/* ================= INIT ================= */
+document.querySelectorAll('.readchk').forEach(c=>{ if(state[c.dataset.key])c.checked=true; });
+buildInfoPager();
+showCell(GRID[1],document.querySelectorAll('.cell')[1]);
+goStep(todayIdx);
+updateProgress();renderToday();updateReadProgress();
+setScreen('home');
+document.getElementById('appTitle').innerHTML='<span class="brand">LAURENT</span>';
+initGate();
+
+/* ================= PWA ================= */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+let deferredPrompt=null;
+const banner=document.getElementById('installBanner');
+const isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+const isiOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+function showBanner(html,android){
+  if(localStorage.getItem('nuadi_install_dismiss')==='1')return;
+  document.getElementById('installText').innerHTML=html;
+  document.getElementById('androidInstall').style.display=android?'block':'none';
+  banner.style.display='block';
+}
+function dismissInstall(){banner.style.display='none';localStorage.setItem('nuadi_install_dismiss','1');}
+function doAndroidInstall(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.finally(()=>{deferredPrompt=null;dismissInstall();});}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;showBanner('홈 화면에 <b>9피드 가이드</b> 앱을 추가하세요',true);});
+if(!isStandalone&&isiOS){setTimeout(()=>showBanner('하단 <b>공유 ⬆️</b> → <b>“홈 화면에 추가”</b>를 누르면<br>앱처럼 쓸 수 있어요',false),1400);}
+</script>
+</body>
+</html>
