@@ -1,5 +1,5 @@
 /* 로랑 9피드 가이드 — 오프라인 캐시 */
-const CACHE = 'nuadi-9feed-v24';
+const CACHE = 'nuadi-9feed-v25';
 const ASSETS = [
   './',
   './index.html',
