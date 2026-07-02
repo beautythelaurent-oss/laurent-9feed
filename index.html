@@ -454,6 +454,12 @@ img{display:block;}
 .video-card.growth{background:linear-gradient(120deg,#F1ECFB,#FBF0F8);border-color:rgba(150,120,200,.28);}
 .video-card.growth .vc-play{background:#9B7FD0;padding-left:0;box-shadow:0 4px 12px rgba(150,120,200,.4);}
 .video-card.growth .vc-arrow{color:#9B7FD0;}
+.video-card.level{background:linear-gradient(120deg,#FBF3E4,#FCEFE0);border-color:rgba(200,138,70,.32);}
+.video-card.level .vc-play{background:var(--gold);padding-left:0;box-shadow:0 4px 12px rgba(200,138,70,.4);}
+.video-card.level .vc-arrow{color:var(--gold);}
+.offer-ribbon{background:var(--red);color:#fff;font-size:11px;font-weight:900;letter-spacing:-.2px;
+  text-align:center;padding:7px 10px;border-radius:10px;margin-bottom:10px;
+  box-shadow:0 4px 12px rgba(224,123,150,.35);}
 
 /* 맛보기 영상 버튼 (관문) */
 .gate-video{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
@@ -513,6 +519,12 @@ img{display:block;}
       <button class="video-card growth" onclick="openChat()">
         <span class="vc-play">👥</span>
         <span class="vc-txt"><b>📔 뷰티샵 성장일지 단톡방</b><br><small>원장님들과 함께 성장하는 공간 · 입장하기</small></span>
+        <span class="vc-arrow">›</span>
+      </button>
+
+      <button class="video-card level" onclick="open17()">
+        <span class="vc-play">📈</span>
+        <span class="vc-txt"><b>혼자 만들기 벅차다면?</b><br><small>템플릿·피드체인지 영상·카페 피드백으로 제대로 (23만)</small></span>
         <span class="vc-arrow">›</span>
       </button>
 
@@ -893,6 +905,7 @@ img{display:block;}
         </button>
 
         <div class="offer">
+          <div class="offer-ribbon">⏰ 이번 기수 선착순 모집 중 · 마감 임박</div>
           <div class="offer-h">한 단계 더 가고 싶다면 ✦</div>
           <button class="offer-card o17" onclick="open17()">
             <div class="o-top"><span class="o-tag">STEP 1</span><span class="o-price"><s class="o-was">39만</s> 23만원</span></div>
@@ -1150,7 +1163,8 @@ fin.innerHTML=`<div class="finale">
   <button class="fbtn ghost" onclick="nav('home')">홈으로</button>
 
   <div class="offer">
-    <div class="offer-h">한 단계 더 가고 싶다면 ✦</div>
+    <div class="offer-ribbon">⏰ 이번 기수 선착순 모집 중 · 마감 임박</div>
+          <div class="offer-h">한 단계 더 가고 싶다면 ✦</div>
     <button class="offer-card o17" onclick="open17()">
       <div class="o-top"><span class="o-tag">STEP 1</span><span class="o-price"><s class="o-was">39만</s> 23만원</span></div>
       <div class="o-title">인스타 기본구성 + 피드체인지 영상 + 카페 피드백</div>
